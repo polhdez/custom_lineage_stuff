@@ -1,0 +1,25 @@
+From 34aa15c9413ec631efcf8365cf3ecba787970da5 Mon Sep 17 00:00:00 2001
+From: Pol Hernandez <polhv@proton.me>
+Date: Wed, 3 Sep 2025 23:32:58 +0200
+Subject: [PATCH] enabled verified boot
+
+---
+ BoardConfigCommon.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/BoardConfigCommon.mk b/BoardConfigCommon.mk
+index 4838111..55240d7 100644
+--- a/BoardConfigCommon.mk
++++ b/BoardConfigCommon.mk
+@@ -165,7 +165,7 @@ include hardware/motorola/sepolicy/qti/SEPolicy.mk
+ 
+ # Verified Boot
+ BOARD_AVB_ENABLE := true
+-BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 3
++#BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 3
+ 
+ # WiFi
+ BOARD_WLAN_DEVICE := qcwcn
+-- 
+2.47.2
+

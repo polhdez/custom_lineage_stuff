@@ -1,0 +1,29 @@
+From ad779321b0ec41569bd0665839d7273c85602110 Mon Sep 17 00:00:00 2001
+From: Pol Hernandez <polhv@proton.me>
+Date: Fri, 5 Sep 2025 22:25:42 +0200
+Subject: [PATCH] Enable signature spoofing for user builds
+
+---
+ .../core/java/com/android/server/pm/ComputerEngine.java     | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/services/core/java/com/android/server/pm/ComputerEngine.java b/services/core/java/com/android/server/pm/ComputerEngine.java
+index 6f581306548c..fbd1c9909055 100644
+--- a/services/core/java/com/android/server/pm/ComputerEngine.java
++++ b/services/core/java/com/android/server/pm/ComputerEngine.java
+@@ -1493,9 +1493,9 @@ public class ComputerEngine implements Computer {
+     private static native boolean isDebuggable();
+ 
+     public static boolean isMicrogSigned(AndroidPackage p) {
+-        if (!isDebuggable()) {
+-            return false;
+-        }
++        //if (!isDebuggable()) {
++        //    return false;
++        //}
+ 
+         // Allowlist the following apps:
+         // * com.android.vending - microG Companion
+-- 
+2.47.2
+
