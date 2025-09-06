@@ -1,12 +1,33 @@
 #!/bin/bash
 
 DEVICE=hawao
+PATCHES_DIR="$HOME/android/lineage_patches/"
+LINEAGE_DIR="$HOME/android/lineage/"
+cd $LINEAGE_DIR
 
-cd ~/android/lineage
+# Sync the sources
+repo sync --force-sync --force-remove-dirty --no-clone-bundle --no-tags -j$(nproc --all)
+
+# Apply patches
+cd $LINEAGE_DIR/device/motorola/hawao/
+git apply $PATCHES_DIR/0001-use-keys-from-android-certs-and-change-key-to-RSA409.patch
+cd $LINEAGE_DIR/device/motorola/sm6225-common/
+git apply $PATCHES_DIR/0001-enabled-verified-boot.patch
+cd $LINEAGE_DIR/build/make/
+git apply $PATCHES_DIR/0001-Applied-patch-to-enable-AVB.patch
+cd $LINEAGE_DIR/frameworks/base/
+git apply $PATCHES_DIR/0001-Enable-signature-spoofing-for-user-builds.patch
+cd $LINEAGE_DIR/packages/apps/Updater/
+git apply $PATCHES_DIR/0001-Disable-OTA-URL-until-I-m-self-hosting.patch
+cd $LINEAGE_DIR
+
+#Build target files
 source build/envsetup.sh
 breakfast $DEVICE user
 croot
 mka target-files-package otatools
+
+#Sign the files
 sign_target_files_apks --avb_vbmeta_key=./android-certs/releasekey.key --avb_vbmeta_algorithm=SHA256_RSA4096 -o -d ~/.android-certs \
     --extra_apks AdServicesApk.apk=$HOME/.android-certs/releasekey \
     --extra_apks FederatedCompute.apk=$HOME/.android-certs/releasekey \
@@ -144,6 +165,7 @@ sign_target_files_apks --avb_vbmeta_key=./android-certs/releasekey.key --avb_vbm
     $OUT/obj/PACKAGING/target_files_intermediates/*-target_files*.zip \
     signed-target_files.zip
 
+#Build the signed zip
 ota_from_target_files -k ~/.android-certs/releasekey \
 	--block --backup=true \
 	signed-target_files.zip \
